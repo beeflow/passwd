@@ -2,7 +2,6 @@
 
 namespace Beeflow\Passwd\Tests;
 
-require_once 'Passwd.php';
 use Beeflow\Passwd\Passwd;
 
 /**
