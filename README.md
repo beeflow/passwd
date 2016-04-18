@@ -10,15 +10,14 @@ The class can also take a given password and verify if it matches the requested 
 
 ### Usage example
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-.. code-block:: php
 	<?php
 
-     include 'password.php';
+     use Beeflow\Passwd\Passwd;
 
      // I am changing default password policy
      $passwordPolicy = array('specialCharsCount' => 3, 'minimumPasswordLength' => 12);
 
-     $password = new password( $passwordPolicy );
+     $password = new Passwd( $passwordPolicy );
 
      // checking password
      $isPasswordOk = $password->check('Th1$I$myPrd!');
@@ -34,5 +33,4 @@ The class can also take a given password and verify if it matches the requested 
      echo "Your password strength info: " . $password->getStrengthInfo()."<br/>";
 
      // generating new password
-     echo "Your new password: " . $password->generate() ."<br/>";
-
+     echo "Your new password: " . $password->generate() ."<br/>";	
