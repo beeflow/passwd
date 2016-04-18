@@ -33,4 +33,4 @@ The class can also take a given password and verify if it matches the requested 
      echo "Your password strength info: " . $password->getStrengthInfo()."<br/>";
 
      // generating new password
-     echo "Your new password: " . $password->generate() ."<br/>";	
+     echo "Your new password: " . $password->generate() ."<br/>";
