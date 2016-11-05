@@ -188,7 +188,7 @@ class Passwd
         $randomPassword = "";
         $minimumPasswordLength = $this->getMinimumPasswordLength();
 
-        for ($i = 0; $i <= $minimumPasswordLength; $i++) {
+        for ($i = 0; $i < $minimumPasswordLength; $i++) {
             $randomPassword .= substr($this->passwordChars, rand(0, strlen($this->passwordChars) - 1), 1);
         }
         if ($this->check($randomPassword)) {
