@@ -1,6 +1,6 @@
 {
   "name": "beeflow/passwd",
-  "license": "GPL",
+  "license": "LGPL-3.0-or-later",
   "description": "Password generator and checker",
   "keywords": [
     "password",
