@@ -14,6 +14,7 @@
  * PARTICULAR PURPOSE. See the GNU General Public License
  * for more details.
  */
+
 namespace Beeflow\Passwd;
 
 /**
@@ -102,7 +103,7 @@ class Passwd
      *
      * @var array
      */
-    private $passwordStrengthInfo = array('Very Weak', 'Very Weak', 'Weak', 'Good', 'Strong', 'Very Strong');
+    private $passwordStrengthInfo = ['Very Weak', 'Very Weak', 'Weak', 'Good', 'Strong', 'Very Strong'];
 
     /**
      * Construct - you may set your own password policy
@@ -110,7 +111,7 @@ class Passwd
      * @param array $passwordPolicy - array(lowerCharsCount => 2, upperCharsCount => 2, specialCharsCount => 2,
      *                              numbersCount => 2, minimumPasswordLength => 2)
      */
-    public function __construct(array $passwordPolicy = array())
+    public function __construct(array $passwordPolicy = [])
     {
         $this->setPolicy($passwordPolicy);
         $this->setPasswordCharts();
@@ -120,11 +121,16 @@ class Passwd
      * Sets password policy
      *
      * @param array $passwordPolicy
+     *
      * @return $this
      */
-    public function setPolicy(array $passwordPolicy)
+    public function setPolicy(array $passwordPolicy): Passwd
     {
-        $myPasswordPolicy = array('lowerCharsCount', 'upperCharsCount', 'specialCharsCount', 'numbersCount', 'minimumPasswordLength');
+        $myPasswordPolicy = ['lowerCharsCount',
+                             'upperCharsCount',
+                             'specialCharsCount',
+                             'numbersCount',
+                             'minimumPasswordLength'];
         foreach ($passwordPolicy as $policyKey => $policyValue) {
             if (in_array($policyKey, $myPasswordPolicy)) {
                 $this->$policyKey = $policyValue;
@@ -140,7 +146,7 @@ class Passwd
      *
      * @return $this
      */
-    private function setPasswordCharts()
+    private function setPasswordCharts(): Passwd
     {
         $passwordCharts = '';
         if (0 < $this->specialCharsCount) {
@@ -161,18 +167,19 @@ class Passwd
     }
 
     /**
-     * @author manuel@levante.de
      * @param string $range
+     *
      * @return array
+     * @author manuel@levante.de
      */
-    private function srange($range)
+    private function srange($range): array
     {
-        $n = array();
-        $a = array();
+        $n = [];
+        $a = [];
         preg_match_all("/([0-9a-zA-Z]{1,2})-([0-9a-zA-Z]{0,2})/", $range, $a);
 
         foreach ($a[1] as $k => $v) {
-            $n = array_merge($n, range($v, (empty($a[2][$k]) ? $v : $a[2][$k])));
+            $n = array_merge($n, range($v, (empty($a[2][ $k ]) ? $v : $a[2][ $k ])));
         }
 
         return ($n);
@@ -183,7 +190,7 @@ class Passwd
      *
      * @return string password
      */
-    public function generate()
+    public function generate(): string
     {
         $randomPassword = "";
         $minimumPasswordLength = $this->getMinimumPasswordLength();
@@ -191,34 +198,36 @@ class Passwd
         for ($i = 0; $i < $minimumPasswordLength; $i++) {
             $randomPassword .= substr($this->passwordChars, rand(0, strlen($this->passwordChars) - 1), 1);
         }
+
         if ($this->check($randomPassword)) {
             return $randomPassword;
-        } else {
-            return $this->generate();
         }
+
+        return $this->generate();
     }
 
     /**
-     *
-     * @return integer
+     * @return int
      */
-    private function getMinimumPasswordLength()
+    private function getMinimumPasswordLength(): int
     {
         $passwordPolicyCharsCount = $this->lowerCharsCount + $this->numbersCount + $this->specialCharsCount + $this->upperCharsCount;
+
         if ($passwordPolicyCharsCount > $this->minimumPasswordLength) {
             return $passwordPolicyCharsCount;
-        } else {
-            return $this->minimumPasswordLength;
         }
+
+        return $this->minimumPasswordLength;
     }
 
     /**
      * Check your password
      *
      * @param string $password
-     * @return boolean
+     *
+     * @return bool
      */
-    public function check($password)
+    public function check($password): bool
     {
         return (
             $this->isPasswordLengthOK($password)
@@ -232,9 +241,10 @@ class Passwd
     /**
      *
      * @param string $password
-     * @return boolean
+     *
+     * @return bool
      */
-    private function isPasswordLengthOK($password)
+    private function isPasswordLengthOK($password): bool
     {
         $passwordLength = strlen($password);
         $minimumLength = $this->getMinimumPasswordLength();
@@ -247,12 +257,13 @@ class Passwd
 
     /**
      *
-     * @param strubg $password
-     * @return boolean
+     * @param string $password
+     *
+     * @return bool
      */
-    private function areUpperCharsOK($password)
+    private function areUpperCharsOK(string $password): bool
     {
-        $o = array();
+        $o = [];
         $upperChars = str_replace(' ', '', $this->upperChars);
         $charsCount = preg_match_all($upperChars, $password, $o);
         if ($charsCount < $this->upperCharsCount) {
@@ -265,13 +276,15 @@ class Passwd
     /**
      *
      * @param string $password
-     * @return boolean
+     *
+     * @return bool
      */
-    private function areLowerCharsOK($password)
+    private function areLowerCharsOK(string $password): bool
     {
-        $o = array();
+        $o = [];
         $lowerChars = str_replace(' ', '', $this->lowerChars);
         $charsCount = preg_match_all($lowerChars, $password, $o);
+
         if ($charsCount < $this->lowerCharsCount) {
             return false;
         }
@@ -282,13 +295,15 @@ class Passwd
     /**
      *
      * @param string $password
-     * @return boolean
+     *
+     * @return bool
      */
-    private function areSpecialCharsOK($password)
+    private function areSpecialCharsOK(string $password): bool
     {
-        $o = array();
+        $o = [];
         $specialChars = str_replace(' ', '', $this->specialChars);
         $charsCount = preg_match_all($specialChars, $password, $o);
+
         if ($charsCount < $this->specialCharsCount) {
             return false;
         }
@@ -299,13 +314,15 @@ class Passwd
     /**
      *
      * @param string $password
-     * @return boolean
+     *
+     * @return bool
      */
-    private function areNumbersOK($password)
+    private function areNumbersOK(string $password): bool
     {
-        $o = array();
+        $o = [];
         $numbers = str_replace(' ', '', $this->numbers);
         $charsCount = preg_match_all($numbers, $password, $o);
+
         if ($charsCount < $this->numbersCount) {
             return false;
         }
@@ -315,9 +332,9 @@ class Passwd
 
     /**
      *
-     * @return integer
+     * @return int
      */
-    public function getStrengthPoints()
+    public function getStrengthPoints(): int
     {
         return $this->passwordStrengthPoints;
     }
@@ -326,9 +343,9 @@ class Passwd
      *
      * @return string
      */
-    public function getStrengthInfo()
+    public function getStrengthInfo(): string
     {
-        return $this->passwordStrengthInfo[$this->passwordStrengthPoints];
+        return $this->passwordStrengthInfo[ $this->passwordStrengthPoints ];
     }
 
     /**
@@ -337,27 +354,30 @@ class Passwd
      *
      * @return $this
      */
-    public function checkStrength($password)
+    public function checkStrength($password): Passwd
     {
         $this->passwordStrengthPoints = 0;
 
         if ($this->areUpperCharsOK($password)) {
             $this->passwordStrengthPoints++;
         }
+
         if ($this->areLowerCharsOK($password)) {
             $this->passwordStrengthPoints++;
         }
+
         if ($this->areSpecialCharsOK($password)) {
             $this->passwordStrengthPoints++;
         }
+
         if ($this->areNumbersOK($password)) {
             $this->passwordStrengthPoints++;
         }
+
         if ($this->isPasswordLengthOK($password)) {
             $this->passwordStrengthPoints++;
         }
 
         return $this;
     }
-
 }
